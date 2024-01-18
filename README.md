@@ -18,7 +18,7 @@ The DFU library is available on Maven Central repository. Add it to your project
 adding the following dependency:
 
 ```Groovy
-implementation 'global.shooters.nordicsemi.android:dfu:1.12.0'
+implementation 'com.github.JustSAT:Android-DFU-Library:1.0.1'
 ```
 
 Latest version targeting API lower than 31 is 1.11.1.
