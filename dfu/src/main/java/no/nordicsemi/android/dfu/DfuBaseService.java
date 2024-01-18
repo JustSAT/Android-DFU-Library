@@ -49,6 +49,7 @@ import android.provider.MediaStore;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
@@ -1031,20 +1032,21 @@ public abstract class DfuBaseService extends IntentService implements DfuProgres
 		final LocalBroadcastManager manager = LocalBroadcastManager.getInstance(this);
 		final IntentFilter actionFilter = makeDfuActionIntentFilter();
 		manager.registerReceiver(mDfuActionReceiver, actionFilter);
-		registerReceiver(mDfuActionReceiver, actionFilter); // Additionally we must register this receiver as a non-local to get broadcasts from the notification actions
+		// Additionally we must register this receiver as a non-local to get broadcasts from the notification actions
+		ContextCompat.registerReceiver(this, mDfuActionReceiver, actionFilter, ContextCompat.RECEIVER_EXPORTED);
 
 		final IntentFilter filter = new IntentFilter();
 		// As we no longer perform any action based on this broadcast, we may log all ACL events
 		filter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
 		filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED);
 		filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
-		registerReceiver(mConnectionStateBroadcastReceiver, filter);
+		ContextCompat.registerReceiver(this, mConnectionStateBroadcastReceiver, filter, ContextCompat.RECEIVER_EXPORTED);
 
 		final IntentFilter bondFilter = new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
-		registerReceiver(mBondStateBroadcastReceiver, bondFilter);
+		ContextCompat.registerReceiver(this, mBondStateBroadcastReceiver, bondFilter, ContextCompat.RECEIVER_EXPORTED);
 
 		final IntentFilter stateFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
-		registerReceiver(mBluetoothStateBroadcastReceiver, stateFilter);
+		ContextCompat.registerReceiver(this, mBluetoothStateBroadcastReceiver, stateFilter, ContextCompat.RECEIVER_EXPORTED);
 	}
 
 	@Override
